@@ -15,7 +15,11 @@
 	      <input type="submit" value="Mark done"/>
 	    </form>
       </td>
-
+      <td>
+	    <form method="POST" action="{{ url_for('tasks_delete', task_id=task.id) }}">
+	      <input type="submit" value="Delete"/>
+	    </form>
+      </td>
     </tr>
     {% endfor %}
   </table>

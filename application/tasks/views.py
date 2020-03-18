@@ -44,3 +44,11 @@ def tasks_search():
     return render_template("tasks/list.html", tasks=found)
 
 
+@app.route("/delete/<task_id>/", methods=["POST"])
+def tasks_delete(task_id):
+    t = Task.query.get(task_id)
+
+    db.session().delete(t)
+    db.session().commit()
+
+    return redirect(url_for("tasks_index"))
