@@ -22,14 +22,20 @@
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('tasks_form') }} ">Add a task</a>
             </li>
+
+            <!-- TODO: activate links when implemented -->
             <li class="nav-item">
               <a class="nav-link disabled" href="#">Log in or sign up</a>
             </li>
             <li class="nav-item">
               <a class="nav-link disabled" href="#">Stats</a>
             </li>
+
           </ul>
-          <!-- search bar -->
+          <form class="form-inline my-2 my-lg-0" method="POST" action="{{ url_for('tasks_search') }}">
+            <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
 	    </div>
       </nav>
 

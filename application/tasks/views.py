@@ -30,3 +30,17 @@ def tasks_create():
     db.session().commit()
 
     return redirect(url_for("tasks_index"))
+
+
+@app.route("/*", methods=["POST"])
+def tasks_search():
+    param = request.form.get("query")
+
+    found = Task.query.filter_by(name=param).all()
+
+    if found is None or len(found) == 0:
+        return "Nothing found :("  # TODO: redirect to a not found page
+
+    return render_template("tasks/list.html", tasks=found)
+
+
