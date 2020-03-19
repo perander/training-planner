@@ -7,3 +7,5 @@ With this program, a user can browse, subscribe and mark as done different kinds
 You can find a more detailed description about the topic [here](./documentation/description.md) and about the database [here](./documentation/aboutdatabase.md).
 
 An updating list of features / user stories can be found on the [project tab](https://github.com/perander/training-planner/projects/1).
+
+The application is in [heroku](https://tsoha-training-planner.herokuapp.com/tasks).
