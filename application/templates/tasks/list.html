@@ -8,7 +8,7 @@
     </tr>
     {% for task in tasks %}
     <tr>
-      <td>{{ task.name }}</td>
+      <td><a href="{{ url_for('tasks_form_update', task_id=task.id) }}">{{ task.name }}</a></td>
       <td>{{ task.done }}</td>
       <td>
 	    <form method="POST" action="{{ url_for('tasks_set_done', task_id=task.id) }}">

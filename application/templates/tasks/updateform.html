@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<th>{{ task.name }}</th>
+<form method="POST" action="{{ url_for('tasks_update', task_id=task.id) }}">
+  <input type="text" name="newname" value="{{ task.name }}"/>
+  <input type="text" name="newdescription" value="{{ task.description }}"/>
+  <input type="submit" value="Update"/>
+</form>
+{% endblock %}

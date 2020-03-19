@@ -9,8 +9,35 @@ def tasks_index():
 
 
 @app.route("/tasks/new/")
-def tasks_form():
+def tasks_form_create():
     return render_template("tasks/new.html")
+
+
+@app.route("/tasks/", methods=["POST"])
+def tasks_create():
+    t = Task(name=request.form.get("name"),
+             description=request.form.get("description"))
+
+    db.session().add(t)
+    db.session().commit()
+
+    return redirect(url_for("tasks_index"))
+
+
+@app.route("/update/<task_id>/")
+def tasks_form_update(task_id):
+    return render_template("tasks/updateform.html", task=Task.query.get(task_id))
+
+
+@app.route("/update/<task_id>/", methods=["POST"])
+def tasks_update(task_id):
+    t = Task.query.get(task_id)
+    t.name = request.form.get("newname")
+    t.description = request.form.get("newdescription")
+
+    db.session().commit()
+
+    return redirect(url_for("tasks_index"))
 
 
 @app.route("/tasks/<task_id>/", methods=["POST"])
@@ -18,16 +45,6 @@ def tasks_set_done(task_id):
     t = Task.query.get(task_id)
     t.done = True
     db.session().commit()  # actually updates the db
-
-    return redirect(url_for("tasks_index"))
-
-
-@app.route("/tasks/", methods=["POST"])
-def tasks_create():
-    t = Task(request.form.get("name"))
-
-    db.session().add(t)
-    db.session().commit()
 
     return redirect(url_for("tasks_index"))
 
@@ -44,7 +61,7 @@ def tasks_search():
     return render_template("tasks/list.html", tasks=found)
 
 
-@app.route("/delete/<task_id>/", methods=["POST"])
+@app.route("/delete/<task_id>", methods=["POST"])
 def tasks_delete(task_id):
     t = Task.query.get(task_id)
 
