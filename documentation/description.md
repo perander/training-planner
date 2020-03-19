@@ -19,6 +19,7 @@ A user with an admin role can create, update and delete tasks and categories and
 - At this point, it is up to the admin to create the content: a non-admin user can only view it. The admin is responsible for creating sensible tasks and hierarchies, so that the possibility of automatically marking subtasks done would be any useful. The program doesn’t know anything about the proper combination of tasks by their content.
 
 ### Planned features (not in order)
+This is the original plan of the future use cases. During the project, I'm keeping an updated and more detailed list of implemented and planned user stories [here](https://github.com/perander/training-planner/projects/1).
 
 ##### Implementing first:
 
