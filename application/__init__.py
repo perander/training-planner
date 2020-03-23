@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_bcrypt import Bcrypt
 
-app = Flask(__name__, instance_relative_config=True)
-app.config.from_pyfile('flask.cfg')
+app = Flask(__name__)
+app.config.from_pyfile('config.py')
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -37,8 +37,6 @@ login_manager.login_message = "Please login to use this functionality."
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
-
-
 
 
 db.create_all()
