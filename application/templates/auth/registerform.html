@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{{ error }}
+<form method="POST" action="{{ url_for('auth_register') }}">
+  <table>
+    <tr>
+      <td>
+        {{ form.username.label }}
+      </td>
+      <td>
+	    {{ form.username }}
+      </td>
+    </tr>
+    <tr>
+      <td>
+	    {{ form.password.label }}
+      </td>
+      <td>
+	    {{ form.password }}
+      </td>
+    </tr>
+    <tr>
+      <td>
+	    Repeat password
+      </td>
+      <td>
+	    {{ form.password }}
+      </td>
+    </tr>
+    <tr>
+      <td>
+	    {{ form.admin.label }}
+      </td>
+      <td>
+	    {{ form.admin }}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+	    <input type="submit" value="Register"/>
+      </td>
+    </tr>
+  </table>
+</form>
+{% endblock %}
