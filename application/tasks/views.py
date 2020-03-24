@@ -1,7 +1,10 @@
-from application import app, db
 from flask import redirect, render_template, request, url_for
+from flask_login import login_required
+
+from application import app, db
 from application.tasks.models import Task
 from application.tasks.forms import TaskForm
+
 
 
 @app.route("/tasks", methods=["GET"])
@@ -9,12 +12,16 @@ def tasks_index():
     return render_template("tasks/list.html", tasks=Task.query.all())
 
 
+# TODO: tiivistä allaolevat silleen 'if request.method = GET', sekä luodessa että päivittäessä
+
 @app.route("/tasks/new/")
+@login_required
 def tasks_form_create():
     return render_template("tasks/new.html", form=TaskForm())
 
 
 @app.route("/tasks/", methods=["POST"])
+@login_required
 def tasks_create():
     form = TaskForm(request.form)
 
@@ -31,11 +38,13 @@ def tasks_create():
 
 
 @app.route("/update/<task_id>/")
+@login_required
 def tasks_form_update(task_id):
     return render_template("tasks/updateform.html", task=Task.query.get(task_id))
 
 
 @app.route("/update/<task_id>/", methods=["POST"])
+@login_required
 def tasks_update(task_id):
     t = Task.query.get(task_id)
     t.name = request.form.get("newname")
@@ -47,6 +56,7 @@ def tasks_update(task_id):
 
 
 @app.route("/tasks/<task_id>/", methods=["POST"])
+@login_required
 def tasks_set_done(task_id):
     t = Task.query.get(task_id)
     t.done = True
@@ -68,6 +78,7 @@ def tasks_search():
 
 
 @app.route("/delete/<task_id>", methods=["POST"])
+@login_required
 def tasks_delete(task_id):
     t = Task.query.get(task_id)
 
