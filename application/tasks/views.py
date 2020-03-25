@@ -23,7 +23,10 @@ def tasks_search():
     return render_template("tasks/list.html", tasks=found)
 
 
-# TODO: tiivistä allaolevat silleen 'if request.method = GET', sekä luodessa että päivittäessä
+@app.route("/tasks/<task_id>/")
+def tasks_view(task_id):
+    return render_template("tasks/view.html", task=Task.query.get(task_id))
+
 
 @app.route("/tasks/new", methods=["GET", "POST"])
 @login_required
@@ -58,11 +61,9 @@ def tasks_update(task_id):
         t.description = request.form.get("newdescription")
 
         db.session().commit()
+        return redirect(url_for("tasks_index"))
 
-    # lopulta jompi kumpi näistä:
-    # return redirect(url_for("tasks_view"))
-    # return render_template("tasks/taskinfo.html", task=Task.query.get(task_id))
-    return redirect(url_for("tasks_index"))
+    return render_template("tasks/view.html", task=Task.query.get(task_id))
 
 
 @app.route("/delete/<task_id>", methods=["POST"])

@@ -1,33 +1,39 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <table>
+<table>
     <tr>
-      <th>Task</th>
-      <th>Done</th>
+        <th>Task</th>
+        {% if current_user.is_authenticated and not current_user.admin %}
+        <th>Done</th>
+        {% endif %}
     </tr>
+
     {% for task in tasks %}
     <tr>
-      <td><a href="{{ url_for('tasks_update', task_id=task.id) }}">{{ task.name }}</a></td>
-      <td>{{ task.done }}</td>
-        <!-- if authenticated: if admin / else-->
-      {% if not current_user.admin %}
-      <td>
-	    <form method="POST" action="{{ url_for('tasks_set_done', task_id=task.id) }}">
-	      <input type="submit" value="Mark done"/>
-	    </form>
-      </td>
-      {% endif %}
+        <td><a href="{{ url_for('tasks_update', task_id=task.id) }}">{{ task.name }}</a></td>
 
-      {% if current_user.admin %}
-      <td>
-	    <form method="POST" action="{{ url_for('tasks_delete', task_id=task.id) }}">
-	      <input type="submit" value="Delete"/>
-	    </form>
-      </td>
-      {% endif %}
+        {% if current_user.is_authenticated and not current_user.admin %}
+        {% if task.done %}
+        <td>Done</td>
+        {% else %}
+        <td>
+            <form method="POST" action="{{ url_for('tasks_set_done', task_id=task.id) }}">
+                <input type="submit" value="Mark done"/>
+            </form>
+        </td>
+        {% endif %}
+        {% endif %}
+
+        {% if current_user.admin %}
+        <td>
+            <form method="POST" action="{{ url_for('tasks_delete', task_id=task.id) }}">
+                <input type="submit" value="Delete"/>
+            </form>
+        </td>
+        {% endif %}
 
     </tr>
     {% endfor %}
-  </table>
+</table>
 {% endblock %}

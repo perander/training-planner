@@ -21,7 +21,7 @@
               <a class="nav-link" href="{{ url_for('tasks_index') }} ">List tasks</a>
             </li>
 
-            {% if current_user.admin %}
+            {% if current_user.admin %} <!-- no need to check for is_authenticated -->
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('tasks_create') }} ">Add a task</a>
             </li>
@@ -36,6 +36,7 @@
               <a class="nav-link" href="{{ url_for('auth_login') }}">Login</a>
               {% endif %}
             </li>
+
             <li class="nav-item">
               <a class="nav-link disabled" href="#">Stats</a>
             </li>
