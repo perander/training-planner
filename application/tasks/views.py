@@ -73,7 +73,6 @@ def tasks_update(task_id):
 def tasks_delete(task_id):
     if current_user.admin:
         t = Task.query.get(task_id)
-        u = User.query.get(current_user.id)
 
         db.session().delete(t)
         db.session().commit()

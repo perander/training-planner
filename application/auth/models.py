@@ -18,12 +18,14 @@ class User(db.Model):
 
     tasksdone = db.relationship('Task',
                                 secondary=done,
-                                backref=db.backref('doneby', lazy='dynamic'),
+                                backref=db.backref('doneby',
+                                                   lazy='dynamic'),
                                 lazy='dynamic')
 
     tasksinprogress = db.relationship('Task',
                                       secondary=inprogress,
-                                      backref=db.backref('inprogressby', lazy='dynamic'),
+                                      backref=db.backref('inprogressby',
+                                                         lazy='dynamic'),
                                       lazy='dynamic')
 
     def __init__(self, username, plaintext, admin):

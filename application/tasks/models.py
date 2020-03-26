@@ -6,8 +6,6 @@ class Task(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(144), nullable=False)
-    done = db.Column(db.Boolean, nullable=False)
-    inprogress = db.Column(db.Boolean, nullable=False)
     description = db.Column(db.String(200), nullable=False)
 
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -16,8 +14,6 @@ class Task(db.Model):
     def __init__(self, name, description):
         self.name = name
         self.description = description
-        self.done = False
-        self.inprogress = False
 
 
 done = db.Table('tasksdone',
