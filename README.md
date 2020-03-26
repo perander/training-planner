@@ -8,4 +8,10 @@ You can find a more detailed description about the topic [here](./documentation/
 
 An updating list of features / user stories can be found on the [project tab](https://github.com/perander/training-planner/projects/1).
 
-The application is in [heroku](https://tsoha-training-planner.herokuapp.com/tasks).
+The application is in [heroku](https://tsoha-training-planner.herokuapp.com/tasks). Example credentials are:
+
+username | password | admin |
+--- |--- |--- |
+admin | admin | True
+hello | hello | False
+new | new | False
