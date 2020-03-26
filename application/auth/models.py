@@ -39,7 +39,7 @@ class User(db.Model):
 
     @password.setter
     def password(self, plaintext):
-        self._password = bcrypt.generate_password_hash(plaintext)
+        self._password = bcrypt.generate_password_hash(plaintext).decode('utf-8')
 
     @hybrid_method
     def is_correct_password(self, plaintext):
