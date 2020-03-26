@@ -12,6 +12,6 @@ The application is in [heroku](https://tsoha-training-planner.herokuapp.com/task
 
 username | password | admin |
 --- |--- |--- |
-admin | admin | True
+theadmin | theadmin | True
 hello | hello | False
 new | new | False
