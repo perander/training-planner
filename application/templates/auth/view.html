@@ -2,12 +2,27 @@
 
 {% block body %}
 <table>
+    <th>{{ user.username }}</th>
     <tr>
-        <th>{{ user.username }}</th>
+        <th>In progress</th>
     </tr>
+    {% for task in user.tasksinprogress %}
+    <tr>
+        <td>
+            <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+        </td>
+    </tr>
+    {% endfor %}
+
+    <tr>
+        <th>Done</th>
+    </tr>
+
     {% for task in user.tasksdone %}
     <tr>
-        <td><a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a></td>
+        <td>
+            <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+        </td>
     </tr>
     {% endfor %}
 </table>

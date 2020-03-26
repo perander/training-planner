@@ -1,7 +1,7 @@
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
 from application import db, bcrypt
-from application.tasks.models import done
+from application.tasks.models import done, inprogress
 
 
 class User(db.Model):
@@ -18,8 +18,13 @@ class User(db.Model):
 
     tasksdone = db.relationship('Task',
                                 secondary=done,
-                                backref=db.backref('account', lazy='dynamic'),
+                                backref=db.backref('doneby', lazy='dynamic'),
                                 lazy='dynamic')
+
+    tasksinprogress = db.relationship('Task',
+                                      secondary=inprogress,
+                                      backref=db.backref('inprogressby', lazy='dynamic'),
+                                      lazy='dynamic')
 
     def __init__(self, username, plaintext, admin):
         self.username = username

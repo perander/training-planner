@@ -73,6 +73,7 @@ def tasks_update(task_id):
 def tasks_delete(task_id):
     if current_user.admin:
         t = Task.query.get(task_id)
+        u = User.query.get(current_user.id)
 
         db.session().delete(t)
         db.session().commit()
@@ -87,10 +88,28 @@ def tasks_set_done(task_id):
         return redirect(url_for("tasks_index"))
 
     t = Task.query.get(task_id)
-
     u = User.query.get(current_user.id)
 
     u.tasksdone.append(t)
+    if t in u.tasksinprogress:
+        u.tasksinprogress.remove(t)
+
+    db.session().add(u)
+    db.session().commit()  # actually updates the db
+
+    return redirect(url_for("tasks_index"))
+
+
+@app.route("/setinprogress/<task_id>/", methods=["POST"])
+@login_required
+def tasks_set_inprogress(task_id):
+    if current_user.admin:
+        return redirect(url_for("tasks_index"))
+
+    t = Task.query.get(task_id)
+    u = User.query.get(current_user.id)
+
+    u.tasksinprogress.append(t)
 
     db.session().add(u)
     db.session().commit()  # actually updates the db

@@ -7,12 +7,25 @@
         {% if current_user.is_authenticated and not current_user.admin %}
          {% if task in current_user.tasksdone %}
         <th>Done</th>
-        {% else %}
+        {% elif task in current_user.tasksinprogress %}
+        <th>In progress</th>
         <td>
             <form method="POST" action="{{ url_for('tasks_set_done', task_id=task.id) }}">
                 <input type="submit" value="Mark done"/>
             </form>
         </td>
+        {% else %}
+        <td>
+            <form method="POST" action="{{ url_for('tasks_set_inprogress', task_id=task.id) }}">
+                <input type="submit" value="Mark in progress"/>
+            </form>
+        </td>
+        <td>
+            <form method="POST" action="{{ url_for('tasks_set_done', task_id=task.id) }}">
+                <input type="submit" value="Mark done"/>
+            </form>
+        </td>
+
         {% endif %}
         {% endif %}
     </tr>

@@ -2,7 +2,6 @@ from application import db
 
 
 class Task(db.Model):
-
     __tablename__ = 'task'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -22,6 +21,11 @@ class Task(db.Model):
 
 
 done = db.Table('tasksdone',
-                     db.Column('account_id', db.Integer, db.ForeignKey('account.id')),
-                     db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
-                     )
+                db.Column('account_id', db.Integer, db.ForeignKey('account.id')),
+                db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
+                )
+
+inprogress = db.Table('tasksinprogress',
+                      db.Column('account_id', db.Integer, db.ForeignKey('account.id')),
+                      db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
+                      )
