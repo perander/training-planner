@@ -5,6 +5,8 @@ from application import app, db
 from application.tasks.models import Task
 from application.tasks.forms import TaskForm
 
+from application.auth.models import User
+
 
 @app.route("/tasks", methods=["GET"])
 def tasks_index():
@@ -85,7 +87,12 @@ def tasks_set_done(task_id):
         return redirect(url_for("tasks_index"))
 
     t = Task.query.get(task_id)
-    t.done = True
+
+    u = User.query.get(current_user.id)
+
+    u.tasksdone.append(t)
+
+    db.session().add(u)
     db.session().commit()  # actually updates the db
 
     return redirect(url_for("tasks_index"))

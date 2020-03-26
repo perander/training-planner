@@ -8,6 +8,11 @@ from application.auth.models import User
 from application.auth.forms import LoginForm, RegisterForm
 
 
+@app.route("/auth/<user_id>/")
+def auth_view(user_id):
+    return render_template("auth/view.html", user=User.query.get(user_id))
+
+
 @app.route("/auth/register", methods=["GET", "POST"])
 def auth_register():
     if request.method == "GET":

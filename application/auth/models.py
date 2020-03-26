@@ -1,10 +1,11 @@
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
 from application import db, bcrypt
+from application.tasks.models import done
 
 
 class User(db.Model):
-    __tablename__ = "account"
+    __tablename__ = 'account'
 
     id = db.Column(db.Integer, primary_key=True)
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -14,6 +15,11 @@ class User(db.Model):
     username = db.Column(db.String(144), nullable=False, unique=True)
     _password = db.Column(db.String(144), nullable=False)
     admin = db.Column(db.Boolean, default=False, nullable=False)
+
+    tasksdone = db.relationship('Task',
+                                secondary=done,
+                                backref=db.backref('account', lazy='dynamic'),
+                                lazy='dynamic')
 
     def __init__(self, username, plaintext, admin):
         self.username = username

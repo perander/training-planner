@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<table>
+    <tr>
+        <th>{{ user.username }}</th>
+    </tr>
+    {% for task in user.tasksdone %}
+    <tr>
+        <td><a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

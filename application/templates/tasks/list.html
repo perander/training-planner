@@ -14,7 +14,7 @@
         <td><a href="{{ url_for('tasks_update', task_id=task.id) }}">{{ task.name }}</a></td>
 
         {% if current_user.is_authenticated and not current_user.admin %}
-        {% if task.done %}
+        {% if task in current_user.tasksdone %}
         <td>Done</td>
         {% else %}
         <td>

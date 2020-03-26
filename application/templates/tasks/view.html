@@ -5,7 +5,7 @@
     <tr>
         <th>{{ task.name }}</th>
         {% if current_user.is_authenticated and not current_user.admin %}
-        {% if task.done %}
+         {% if task in current_user.tasksdone %}
         <th>Done</th>
         {% else %}
         <td>
