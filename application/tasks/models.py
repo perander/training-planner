@@ -1,15 +1,12 @@
 from application import db
+from application.models import Base
 
 
-class Task(db.Model):
+class Task(Base):
     __tablename__ = 'task'
 
-    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(144), nullable=False)
     description = db.Column(db.String(200), nullable=False)
-
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
     def __init__(self, name, description):
         self.name = name

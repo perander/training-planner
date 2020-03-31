@@ -2,15 +2,11 @@ from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
 from application import db, bcrypt
 from application.tasks.models import done, inprogress
+from application.models import Base
 
 
-class User(db.Model):
+class User(Base):
     __tablename__ = 'account'
-
-    id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
-                              onupdate=db.func.current_timestamp())
 
     username = db.Column(db.String(144), nullable=False, unique=True)
     _password = db.Column(db.String(144), nullable=False)
@@ -39,7 +35,7 @@ class User(db.Model):
 
     @password.setter
     def password(self, plaintext):
-        self._password = bcrypt.generate_password_hash(plaintext)\
+        self._password = bcrypt.generate_password_hash(plaintext) \
             .decode('utf-8')  # for heroku
 
     @hybrid_method
