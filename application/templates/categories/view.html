@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<table>
+    <th>{{ category.name }}</th>
+    {% for task in category.taskstagged %}
+    <tr>
+        <td>
+            <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -25,6 +25,8 @@ from application.tasks import views
 from application.auth import models
 from application.auth import views
 
+from application.category import models, views
+
 # login
 from application.auth.models import User
 from os import urandom
@@ -45,7 +47,10 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 
+# db.create_all()
+
 try:
     db.create_all()
 except:
+    print("creating db failed")
     pass

@@ -6,6 +6,7 @@ from application.tasks.models import Task
 from application.tasks.forms import TaskForm
 
 from application.auth.models import User
+from application.category.models import Category
 
 
 @app.route("/tasks", methods=["GET"])
@@ -35,12 +36,9 @@ def tasks_view(task_id):
 def tasks_create():
     if current_user.admin:
         if request.method == "GET":
-            return render_template("tasks/new.html", form=TaskForm())
+            return render_template("tasks/new.html", form=TaskForm(), categories=Category.query.all())
 
         form = TaskForm(request.form)
-
-        if not form.validate():
-            return render_template("tasks/new.html", form=form)
 
         t = Task(name=form.name.data,
                  description=form.description.data)
@@ -68,7 +66,7 @@ def tasks_update(task_id):
     return render_template("tasks/view.html", task=Task.query.get(task_id))
 
 
-@app.route("/delete/<task_id>", methods=["POST"])
+@app.route("/deletetask/<task_id>", methods=["POST"])
 @login_required
 def tasks_delete(task_id):
     if current_user.admin:

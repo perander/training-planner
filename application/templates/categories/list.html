@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<table>
+    <tr>
+        <th>Categories</th>
+    </tr>
+    {% for category in categories %}
+    <tr>
+        <td>
+            <a href="{{ url_for('categories_view', category_id=category.id) }}">{{ category.name }}</a>
+        </td>
+        {% if current_user.admin %}
+        <td>
+            <form method="POST" action="{{ url_for('categories_delete', category_id=category.id) }}">
+                <input type="submit" value="Delete"/>
+            </form>
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
