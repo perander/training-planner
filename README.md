@@ -15,3 +15,5 @@ username | password | admin |
 theadmin | theadmin | True
 hello | hello | False
 new | new | False
+
+It is however also possible to register a new user.
