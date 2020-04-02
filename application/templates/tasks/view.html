@@ -31,5 +31,15 @@
     <tr>
         <td>{{ task.description }}</td>
     </tr>
+
+    {% for category in categories %}
+    <tr>
+        <td>
+            <a href="{{ url_for('categories_view', category_id=category.id) }}">{{ category.name }}</a>
+        </td>
+    </tr>
+    {% endfor %}
+
+
 </table>
 {% endblock %}

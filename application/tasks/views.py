@@ -28,7 +28,12 @@ def tasks_search():
 
 @app.route("/tasks/<task_id>/")
 def tasks_view(task_id):
-    return render_template("tasks/view.html", task=Task.query.get(task_id))
+    categories = Category.query.join(tags).join(Task).filter(
+        (tags.c.category_id == Category.id) & (tags.c.task_id == task_id)).all()
+
+    # print("task tagged with: ", categories)
+
+    return render_template("tasks/view.html", task=Task.query.get(task_id), categories=categories)
 
 
 @app.route("/tasks/new", methods=["GET", "POST"])
@@ -42,7 +47,7 @@ def tasks_create():
 
         # TODO: multipleselectfield doesn't support form.validate, need custom validation
         # if not form.validate():
-          #  return render_template("tasks/new.html", form=form)
+        #    return render_template("tasks/new.html", form=form)
 
         if form.is_submitted():
             t = Task(name=form.name.data,

@@ -11,8 +11,13 @@
 
     {% for task in tasks %}
     <tr>
-        <td><a href="{{ url_for('tasks_update', task_id=task.id) }}">{{ task.name }}</a></td>
-
+        <td>
+            {% if current_user.admin %}
+            <a href="{{ url_for('tasks_update', task_id=task.id) }}">{{ task.name }}</a>
+            {% else %}
+            <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+            {% endif %}
+        </td>
         {% if current_user.is_authenticated and not current_user.admin %}
         {% if task in current_user.tasksdone %}
         <td>Done</td>
