@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{% if topdone is defined %}
+<p>
+  These tasks have been marked as done the most:
+</p>
+
+<ul>
+  {% for task in topdone %}
+  <li>
+    {% if current_user.admin %}
+    <a href="{{ url_for('tasks_update', task_id=task.id) }}">{{ task.name }}</a>
+    {% else %}
+    <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+    {% endif %} {{task.done_by}}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if topinprogress is defined %}
+<p>
+  These tasks have been marked in progress the most:
+</p>
+
+<ul>
+  {% for task in topinprogress %}
+  <li>
+    {% if current_user.admin %}
+    <a href="{{ url_for('tasks_update', task_id=task.id) }}">{{ task.name }}</a>
+    {% else %}
+    <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+    {% endif %} {{task.inprogress_by}}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
