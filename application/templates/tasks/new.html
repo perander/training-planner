@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-  
+
 {% block body %}
 <form method="POST" action="{{ url_for('tasks_create') }}">
   <table>
@@ -26,6 +26,18 @@
         {{ form.description }}
       </td>
     </tr>
+    {% for category in categories %}
+    <tr>
+      <td>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="categories" value={{category.id}}>
+          <label class="form-check-label" for="id_{{category.name}}">
+            {{ category.name }}
+          </label>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
     <tr>
       <td colspan="3">
         <input type="submit" value="Create"/>

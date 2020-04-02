@@ -6,8 +6,13 @@
     {% for task in category.taskstagged %}
     <tr>
         <td>
+            {% if current_user.admin %}
+            <a href="{{ url_for('tasks_update', task_id=task.id) }}">{{ task.name }}</a>
+            {% else %}
             <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+            {% endif %}
         </td>
+
     </tr>
     {% endfor %}
 </table>

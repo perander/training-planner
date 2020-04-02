@@ -2,7 +2,7 @@ from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
 
 from application import app, db
-from application.tasks.models import Task
+from application.tasks.models import Task, tags
 from application.tasks.forms import TaskForm
 
 from application.auth.models import User
@@ -40,11 +40,22 @@ def tasks_create():
 
         form = TaskForm(request.form)
 
-        t = Task(name=form.name.data,
-                 description=form.description.data)
+        # TODO: multipleselectfield doesn't support form.validate, need custom validation
+        # if not form.validate():
+          #  return render_template("tasks/new.html", form=form)
 
-        db.session().add(t)
-        db.session().commit()
+        if form.is_submitted():
+            t = Task(name=form.name.data,
+                     description=form.description.data)
+
+            for id in form.categories.data:
+                c = Category.query.get(id)
+                print("category: ", c.name)
+                c.taskstagged.append(t)
+                db.session.add(c)
+
+            db.session().add(t)
+            db.session().commit()
 
     return redirect(url_for("tasks_index"))
 

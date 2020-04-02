@@ -5,7 +5,7 @@
     <tr>
         <th>{{ task.name }}</th>
         {% if current_user.is_authenticated and not current_user.admin %}
-         {% if task in current_user.tasksdone %}
+        {% if task in current_user.tasksdone %}
         <th>Done</th>
         {% elif task in current_user.tasksinprogress %}
         <th>In progress</th>
@@ -25,7 +25,6 @@
                 <input type="submit" value="Mark done"/>
             </form>
         </td>
-
         {% endif %}
         {% endif %}
     </tr>

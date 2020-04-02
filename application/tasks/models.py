@@ -23,7 +23,7 @@ inprogress = db.Table('tasksinprogress',
                       db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
                       )
 
-tags = db.Table('taskscategory',
+tags = db.Table('tags',
                 db.Column('category_id', db.Integer, db.ForeignKey('category.id')),
                 db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
                 )

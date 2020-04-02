@@ -12,7 +12,7 @@ class Category(Base):
 
     taskstagged = db.relationship('Task',
                                   secondary=tags,
-                                  backref=db.backref('categories',
+                                  backref=db.backref('taggedwith',
                                                      lazy='dynamic'),
                                   lazy='dynamic')
 
