@@ -19,7 +19,7 @@ class Task(Base):
         stmt = text("SELECT task_id, task.name, COUNT(*)"
                     " FROM tasksdone, task"
                     " WHERE tasksdone.task_id = task.id"
-                    " GROUP BY task_id"
+                    " GROUP BY task_id, task.name"
                     " ORDER BY COUNT(*) DESC")
 
         res = db.engine.execute(stmt)
@@ -35,7 +35,7 @@ class Task(Base):
         stmt = text("SELECT task_id, task.name, COUNT(*)"
                     " FROM tasksinprogress, task"
                     " WHERE tasksinprogress.task_id = task.id"
-                    " GROUP BY task_id"
+                    " GROUP BY task_id, task.name"
                     " ORDER BY COUNT(*) DESC")
 
         res = db.engine.execute(stmt)
