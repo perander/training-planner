@@ -31,8 +31,6 @@ def tasks_view(task_id):
     categories = Category.query.join(tags).join(Task).filter(
         (tags.c.category_id == Category.id) & (tags.c.task_id == task_id)).all()
 
-    # print("task tagged with: ", categories)
-
     return render_template("tasks/view.html", task=Task.query.get(task_id), categories=categories)
 
 
@@ -69,17 +67,40 @@ def tasks_create():
 @login_required
 def tasks_update(task_id):
     if current_user.admin:
+        task = Task.query.get(task_id)
+        all_categories = Category.query.all()
+        old_categories = Category.query.join(tags).join(Task). \
+            filter((tags.c.category_id == Category.id) & (tags.c.task_id == task_id)).all()
+
         if request.method == "GET":
-            return render_template("tasks/updateform.html", task=Task.query.get(task_id))
+            return render_template("tasks/updateform.html",
+                                   form=TaskForm(),
+                                   task=task,
+                                   categories=all_categories,
+                                   tags=old_categories)
+
+        form = TaskForm(request.form)
+
+        # TODO: validointi
+        # if not form.validate():
+        #   return render_template("tasks/update.html", form=form,
+        #   task=task, categories=categories, tags=old_categories)
 
         t = Task.query.get(task_id)
-        t.name = request.form.get("newname")
-        t.description = request.form.get("newdescription")
+        t.name = form.name.data
+        t.description = form.description.data
+
+        updated_categories = form.categories.data
+
+        for c in all_categories:
+            if str(c.id) in updated_categories and c not in old_categories:
+                c.taskstagged.append(t)
+            elif str(c.id) not in updated_categories and c in old_categories:
+                c.taskstagged.remove(t)
+            db.session.add(c)
 
         db.session().commit()
-        return redirect(url_for("tasks_index"))
-
-    return render_template("tasks/view.html", task=Task.query.get(task_id))
+    return redirect(url_for("tasks_index"))
 
 
 @app.route("/deletetask/<task_id>", methods=["POST"])
@@ -108,7 +129,7 @@ def tasks_set_done(task_id):
         u.tasksinprogress.remove(t)
 
     db.session().add(u)
-    db.session().commit()  # actually updates the db
+    db.session().commit()
 
     return redirect(url_for("tasks_index"))
 
@@ -125,6 +146,6 @@ def tasks_set_inprogress(task_id):
     u.tasksinprogress.append(t)
 
     db.session().add(u)
-    db.session().commit()  # actually updates the db
+    db.session().commit()
 
     return redirect(url_for("tasks_index"))

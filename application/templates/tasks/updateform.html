@@ -3,8 +3,51 @@
 {% block body %}
 <th>{{ task.name }}</th>
 <form method="POST" action="{{ url_for('tasks_update', task_id=task.id) }}">
-  <input type="text" name="newname" value="{{ task.name }}"/>
-  <input type="text" name="newdescription" value="{{ task.description }}"/>
-  <input type="submit" value="Update"/>
+  <table>
+    <tr>
+      <td>
+        {{ form.name.label }}
+      </td>
+      <td>
+        {{ form.name(value=task.name) }}
+      </td>
+      <td>
+        <ul>
+          {% for error in form.name.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        {{ form.description.label }}
+      </td>
+      <td>
+        {{ form.description(value=task.description) }}
+      </td>
+    </tr>
+    {% for category in categories %}
+    <tr>
+      <td>
+        <div class="form-check">
+          {% if category in tags %}
+          <input class="form-check-input" type="checkbox" checked=True name="categories" value={{category.id}}>
+          {% else %}
+          <input class="form-check-input" type="checkbox" name="categories" value={{category.id}}>
+          {% endif %}
+          <label class="form-check-label" for="id_{{category.name}}">
+            {{ category.name }}
+          </label>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td colspan="3">
+        <input type="submit" value="Update"/>
+      </td>
+    </tr>
+  </table>
 </form>
 {% endblock %}
