@@ -12,7 +12,9 @@ class LoginForm(FlaskForm):
 
 class RegisterForm(FlaskForm):
     username = StringField("Username", [validators.Length(min=2)])
-    password = PasswordField("Password", [validators.Length(min=2)])
+    password = PasswordField("Password", [validators.Length(min=2),
+                                          validators.equal_to('confirm_password')])
+    confirm_password = PasswordField("Repeat password")
     admin = BooleanField("Admin")
 
     class Meta:
