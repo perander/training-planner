@@ -39,7 +39,10 @@ def tasks_view(task_id):
 def tasks_create():
     if current_user.admin:
         if request.method == "GET":
-            return render_template("tasks/new.html", form=TaskForm(), categories=Category.query.all())
+            return render_template("tasks/new.html",
+                                   form=TaskForm(),
+                                   categories=Category.query.all(),
+                                   tasks=Task.query.all())
 
         form = TaskForm(request.form)
 
@@ -56,6 +59,13 @@ def tasks_create():
                 print("category: ", c.name)
                 c.taskstagged.append(t)
                 db.session.add(c)
+
+            print("subtasks ", form.subtasks.data)
+
+            for id in form.subtasks.data:
+                s = Task.query.get(id)
+                print("task ", s.name)
+                t.set_subtask(s)
 
             db.session().add(t)
             db.session().commit()
