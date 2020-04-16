@@ -28,10 +28,17 @@ def tasks_search():
 
 @app.route("/tasks/<task_id>/")
 def tasks_view(task_id):
+    task = Task.query.get(task_id)
+
     categories = Category.query.join(tags).join(Task).filter(
         (tags.c.category_id == Category.id) & (tags.c.task_id == task_id)).all()
 
-    return render_template("tasks/view.html", task=Task.query.get(task_id), categories=categories)
+    page = request.args.get('page', 1, type=int)
+    pagination = task.subtasks.paginate(page, per_page=5, error_out=False)
+
+    trythese = [{'subtask': item.subtask} for item in pagination.items]
+
+    return render_template("tasks/view.html", task=task, categories=categories, subtasks=trythese)
 
 
 @app.route("/tasks/new", methods=["GET", "POST"])
