@@ -2,7 +2,7 @@ from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
 
 from application import app, db
-from application.tasks.models import Task, tags, Subtask
+from application.tasks.models import Task, tags
 from application.tasks.forms import TaskForm
 
 from application.auth.models import User
@@ -60,8 +60,7 @@ def tasks_create():
 
             for id in form.categories.data:
                 c = Category.query.get(id)
-                c.taskstagged.append(t)
-                db.session.add(c)
+                t.add_tag(c)
 
             for id in form.subtasks.data:
                 s = Task.query.get(id)
@@ -111,10 +110,9 @@ def tasks_update(task_id):
 
         for c in all_categories:
             if str(c.id) in updated_categories and c not in old_categories:
-                c.taskstagged.append(t)
+                task.add_tag(c)
             elif str(c.id) not in updated_categories and c in old_categories:
-                c.taskstagged.remove(t)
-            db.session.add(c)
+                task.remove_tag(c)
 
         for st in all_subtasks:
             if str(st.id) in updated_subtasks and st not in old_subtasks:
@@ -122,6 +120,7 @@ def tasks_update(task_id):
             elif str(st.id) not in updated_subtasks and st in old_subtasks:
                 task.remove_subtask(st)
 
+        db.session.add(task)
         db.session().commit()
     return redirect(url_for("tasks_index"))
 

@@ -1,5 +1,6 @@
 from application import db
 from application.models import Base
+from application.category.models import Category
 
 from sqlalchemy.sql import text
 
@@ -10,11 +11,23 @@ class Subtask(db.Model):
     subtask_id = db.Column(db.Integer, db.ForeignKey('task.id'), primary_key=True)
 
 
+tags = db.Table('tags',
+                db.Column('category_id', db.Integer, db.ForeignKey('category.id')),
+                db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
+                )
+
+
 class Task(Base):
     __tablename__ = 'task'
 
     name = db.Column(db.String(144), nullable=False)
     description = db.Column(db.String(200), nullable=False)
+
+    tags = db.relationship('Category',
+                           secondary=tags,
+                           backref=db.backref('taggedtasks', lazy='dynamic'),
+                           lazy='dynamic')
+    # cascade='all, delete-orphan')
 
     supertasks = db.relationship('Subtask',
                                  foreign_keys=[Subtask.subtask_id],
@@ -30,6 +43,17 @@ class Task(Base):
     def __init__(self, name, description):
         self.name = name
         self.description = description
+
+    def add_tag(self, category):
+        self.tags.append(category)
+
+    def remove_tag(self, category):
+        self.tags.remove(category)
+
+    def is_tag_for(self, task):
+        if task.id is None:
+            return False
+        return self in task.tags.all()
 
     # in these 4 methods, self refers to the task being created/updated.
     # A task can assign subtasks for itself, but not assign itself (as a subtask) for other tasks
@@ -97,8 +121,3 @@ inprogress = db.Table('tasksinprogress',
                       db.Column('account_id', db.Integer, db.ForeignKey('account.id')),
                       db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
                       )
-
-tags = db.Table('tags',
-                db.Column('category_id', db.Integer, db.ForeignKey('category.id')),
-                db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
-                )

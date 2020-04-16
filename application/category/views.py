@@ -13,7 +13,9 @@ def categories_index():
 
 @app.route("/categories/<category_id>/")
 def categories_view(category_id):
-    return render_template("categories/view.html", category=Category.query.get(category_id))
+    c = Category.query.get(category_id)
+    tasks = c.taggedtasks.all()
+    return render_template("categories/view.html", category=Category.query.get(category_id), tasks=tasks)
 
 
 @app.route("/categories/new", methods=["GET", "POST"])
