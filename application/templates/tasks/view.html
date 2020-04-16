@@ -44,11 +44,11 @@
 {% if current_user.is_authenticated and not current_user.admin %}
 {% if subtasks %}
 <table>
-    <th>In order to prepare for this, try these:</th>
+    <th>Prerequisites:</th>
     {% for subtask in subtasks %}
     <tr>
         <td>
-            <a href="{{ url_for('tasks_view', task_id=subtask.subtask.id) }}">{{ subtask.subtask.name }}</a>
+            <a href="{{ url_for('tasks_view', task_id=subtask.id) }}">{{ subtask.name }}</a>
         </td>
     </tr>
     {% endfor %}

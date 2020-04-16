@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<th>{{ task.name }}</th>
 <form method="POST" action="{{ url_for('tasks_update', task_id=task.id) }}">
   <table>
+    <th>{{ task.name }}</th>
     <tr>
       <td>
         {{ form.name.label }}
@@ -27,22 +27,50 @@
         {{ form.description(value=task.description) }}
       </td>
     </tr>
-    {% for category in categories %}
     <tr>
       <td>
-        <div class="form-check">
-          {% if category in tags %}
-          <input class="form-check-input" type="checkbox" checked=True name="categories" value={{category.id}}>
-          {% else %}
-          <input class="form-check-input" type="checkbox" name="categories" value={{category.id}}>
-          {% endif %}
-          <label class="form-check-label" for="id_{{category.name}}">
-            {{ category.name }}
-          </label>
-        </div>
+        <table>
+          <th>Update categories:</th>
+          {% for category in categories %}
+          <tr>
+            <td>
+              <div class="form-check">
+                {% if category in tags %}
+                <input class="form-check-input" type="checkbox" checked=True name="categories" value={{category.id}}>
+                {% else %}
+                <input class="form-check-input" type="checkbox" name="categories" value={{category.id}}>
+                {% endif %}
+                <label class="form-check-label">
+                  {{ category.name }}
+                </label>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </td>
+      <td>
+        <table>
+          <th>Update prerequisites:</th>
+          {% for task in subtasks %}
+          <tr>
+            <td>
+              <div class="form-check">
+                {% if task in existing %}
+                <input class="form-check-input" type="checkbox" checked=True name="subtasks" value={{task.id}}>
+                {% else %}
+                <input class="form-check-input" type="checkbox" name="subtasks" value={{task.id}}>
+                {% endif %}
+                <label class="form-check-label">
+                  {{ task.name }}
+                </label>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
       </td>
     </tr>
-    {% endfor %}
     <tr>
       <td colspan="3">
         <input type="submit" value="Update"/>

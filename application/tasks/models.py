@@ -34,7 +34,7 @@ class Task(Base):
     # in these 4 methods, self refers to the task being created/updated.
     # A task can assign subtasks for itself, but not assign itself (as a subtask) for other tasks
     def set_subtask(self, task):
-        if not self.has_subtask(task):
+        if not task.has_supertask(self):
             s = Subtask(supertask=self, subtask=task)
             db.session.add(s)
 

@@ -2,7 +2,7 @@ from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
 
 from application import app, db
-from application.tasks.models import Task, tags
+from application.tasks.models import Task, tags, Subtask
 from application.tasks.forms import TaskForm
 
 from application.auth.models import User
@@ -31,14 +31,11 @@ def tasks_view(task_id):
     task = Task.query.get(task_id)
 
     categories = Category.query.join(tags).join(Task).filter(
-        (tags.c.category_id == Category.id) & (tags.c.task_id == task_id)).all()
+        (tags.c.category_id == Category.id) & (tags.c.task_id == task.id)).all()
 
-    page = request.args.get('page', 1, type=int)
-    pagination = task.subtasks.paginate(page, per_page=5, error_out=False)
+    subtasks = [item.subtask for item in task.subtasks]
 
-    trythese = [{'subtask': item.subtask} for item in pagination.items]
-
-    return render_template("tasks/view.html", task=task, categories=categories, subtasks=trythese)
+    return render_template("tasks/view.html", task=task, categories=categories, subtasks=subtasks)
 
 
 @app.route("/tasks/new", methods=["GET", "POST"])
@@ -63,15 +60,11 @@ def tasks_create():
 
             for id in form.categories.data:
                 c = Category.query.get(id)
-                print("category: ", c.name)
                 c.taskstagged.append(t)
                 db.session.add(c)
 
-            print("subtasks ", form.subtasks.data)
-
             for id in form.subtasks.data:
                 s = Task.query.get(id)
-                print("task ", s.name)
                 t.set_subtask(s)
 
             db.session().add(t)
@@ -86,15 +79,21 @@ def tasks_update(task_id):
     if current_user.admin:
         task = Task.query.get(task_id)
         all_categories = Category.query.all()
-        old_categories = Category.query.join(tags).join(Task). \
-            filter((tags.c.category_id == Category.id) & (tags.c.task_id == task_id)).all()
+        old_categories = Category.query.join(tags).join(Task).filter(
+            (tags.c.category_id == Category.id) & (tags.c.task_id == task_id)).all()
+
+        all_subtasks = Task.query.all()
+        old_subtasks = [item.subtask for item in task.subtasks]
 
         if request.method == "GET":
             return render_template("tasks/updateform.html",
                                    form=TaskForm(),
                                    task=task,
                                    categories=all_categories,
-                                   tags=old_categories)
+                                   tags=old_categories,
+                                   subtasks=all_subtasks,
+                                   existing=old_subtasks
+                                   )
 
         form = TaskForm(request.form)
 
@@ -108,6 +107,7 @@ def tasks_update(task_id):
         t.description = form.description.data
 
         updated_categories = form.categories.data
+        updated_subtasks = form.subtasks.data
 
         for c in all_categories:
             if str(c.id) in updated_categories and c not in old_categories:
@@ -115,6 +115,12 @@ def tasks_update(task_id):
             elif str(c.id) not in updated_categories and c in old_categories:
                 c.taskstagged.remove(t)
             db.session.add(c)
+
+        for st in all_subtasks:
+            if str(st.id) in updated_subtasks and st not in old_subtasks:
+                task.set_subtask(st)
+            elif str(st.id) not in updated_subtasks and st in old_subtasks:
+                task.remove_subtask(st)
 
         db.session().commit()
     return redirect(url_for("tasks_index"))
