@@ -12,6 +12,8 @@ class User(Base):
     _password = db.Column(db.String(144), nullable=False)
     admin = db.Column(db.Boolean, default=False, nullable=False)
 
+    # todo: cascade all, delete-orphan -> pitäisi toimia niin että deletoi
+    # association tablesta, ei taskeista tai accountista
     tasksdone = db.relationship('Task',
                                 secondary=done,
                                 backref=db.backref('doneby',
@@ -53,3 +55,8 @@ class User(Base):
 
     def is_authenticated(self):
         return True
+
+    def roles(self):
+        if self.admin:
+            return ["ADMIN"]
+        return []
