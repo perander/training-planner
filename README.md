@@ -6,6 +6,8 @@ With this program, a user can browse, subscribe and mark as done different kinds
 
 You can find a more detailed [description about the topic](./documentation/description.md) and more [about the database](./documentation/aboutdatabase.md), as well as an updating list of [user stories](https://github.com/perander/training-planner/projects/1).
 
+See the [user guide](./documentation/userguide.md) and instructions on [how to install](./documentation/install.md) the application locally and in heroku.
+
 The application is in [heroku](https://tsoha-training-planner.herokuapp.com/tasks). Example credentials are:
 
 username | password | admin |
