@@ -55,11 +55,11 @@ def login_required(_func=None, *, role="ANY"):
 
 from application import views
 
-from application.tasks import models, views
+from application.category import models
 
-from application.auth import models, views
+from application.tasks import models
 
-from application.category import models, views
+from application.auth import models
 
 from application.stats import views
 
@@ -77,3 +77,9 @@ try:
 except:
     print("creating db failed")
     pass
+
+from application.category import views
+
+from application.tasks import views
+
+from application.auth import views
