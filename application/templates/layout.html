@@ -10,7 +10,7 @@
 
     <body>
       <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-	    <a class="navbar-brand" href="#">Training planner</a>
+	    <a class="navbar-brand" href="{{ url_for('index') }}">Training planner</a>
 	    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
 	    </button>
@@ -21,7 +21,7 @@
               <a class="nav-link" href="{{ url_for('tasks_index') }} ">Tasks</a>
             </li>
 
-            {% if current_user.admin %} <!-- no need to check for is_authenticated -->
+            {% if current_user.admin %}
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('tasks_create') }} ">Add a task</a>
             </li>
@@ -31,7 +31,7 @@
               <a class="nav-link" href="{{ url_for('categories_index') }} ">Categories</a>
             </li>
 
-            {% if current_user.admin %} <!-- no need to check for is_authenticated -->
+            {% if current_user.admin %}
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('categories_create') }} ">Add a category</a>
             </li>

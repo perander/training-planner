@@ -1,7 +1,30 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<p>
-  Hei maailma!
-</p>
+<h1>Welcome, {{ current_user.username}}!</h1>
+
+<h2>New tasks for you:</h2>
+<ul>
+  {% for task in new %}
+  <li>
+    <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+
+
+<h2>Continue with your tasks in progress:</h2>
+<table>
+  <tr>
+    <th>Task</th>
+  </tr>
+  {% for task in inprogress %}
+  <tr>
+    <td>
+      <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+      {{ task.date }}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
 {% endblock %}

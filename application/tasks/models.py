@@ -79,6 +79,42 @@ class Task(Base):
         return self.supertasks.filter_by(
             supertask_id=task.id).first() is not None
 
+    # @staticmethod
+    # def show_new_tasks(user):
+    #     stmt = text("SELECT task.id, tasksinprogress.task_id,"
+    #                 "tasksdone.task_id, tasksinprogress.account_id, "
+    #                 "tasksdone.account_id, task.name "
+    #                 " FROM tasksinprogress, task, account"
+    #                 " WHERE tasksinprogress.task_id = task.id"
+    #                 " AND tasksinprogress.account_id = " + str(user.id) +
+    #                 " GROUP BY task_id, task.name"
+    #                 " ORDER BY task.date_modified DESC")
+    #
+    #     res = db.engine.execute(stmt)
+    #
+    #     response = []
+    #     for row in res:
+    #         response.append({"id": row[0], "name": row[1], "date": row[2]})
+    #
+    #     return response
+
+    @staticmethod
+    def show_tasksinprogress_by(user):
+        stmt = text("SELECT task_id, task.name, task.date_modified"
+                    " FROM tasksinprogress, task"
+                    " WHERE tasksinprogress.task_id = task.id"
+                    " AND tasksinprogress.account_id = " + str(user.id) +
+                    " GROUP BY task_id, task.name"
+                    " ORDER BY task.date_modified DESC")
+
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"id": row[0], "name": row[1]})
+
+        return response
+
     @staticmethod
     def show_tasksdone_in_order_of_popularity():
         stmt = text("SELECT task_id, task.name, COUNT(*)"
