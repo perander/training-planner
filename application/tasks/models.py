@@ -104,7 +104,7 @@ class Task(Base):
                     " FROM tasksinprogress, task"
                     " WHERE tasksinprogress.task_id = task.id"
                     " AND tasksinprogress.account_id = " + str(user.id) +
-                    " GROUP BY task_id, task.name"
+                    " GROUP BY task_id, task.name, task.date_modified "
                     " ORDER BY task.date_modified DESC")
 
         res = db.engine.execute(stmt)
