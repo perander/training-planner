@@ -57,6 +57,8 @@ from application.category import models
 
 from application.tasks import models
 
+from application import views
+
 from application.auth import models
 
 from application.stats import views
@@ -81,5 +83,3 @@ from application.category import views
 from application.tasks import views
 
 from application.auth import views
-
-from application import views
