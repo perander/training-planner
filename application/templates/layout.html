@@ -40,11 +40,9 @@
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('stats') }}">Stats</a>
             </li>
-
-            <!-- TODO: placeholder just 'Search' when possible to search everything-->
             <li>
-              <form class="form-inline my-2 my-lg-0" method="POST" action="{{ url_for('tasks_search') }}">
-                <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search for a task" aria-label="Search">
+              <form class="form-inline my-2 my-lg-0" method="POST" action="{{ url_for('search') }}">
+                <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
               </form>
             </li>

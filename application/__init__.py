@@ -53,8 +53,6 @@ def login_required(_func=None, *, role="ANY"):
     return wrapper if _func is None else wrapper(_func)
 
 
-from application import views
-
 from application.category import models
 
 from application.tasks import models
@@ -83,3 +81,5 @@ from application.category import views
 from application.tasks import views
 
 from application.auth import views
+
+from application import views

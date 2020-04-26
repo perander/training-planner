@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<table>
+  {% if foundtasks %}
+    <th>Tasks:</th>
+    {% for task in foundtasks %}
+    <tr>
+      <td>
+        {% if current_user.admin %}
+            <a href="{{ url_for('tasks_update', task_id=task.id) }}">{{ task.name }}</a>
+            {% else %}
+            <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  {% endif %}
+</table>
+
+<table>
+  {% if foundcategories %}
+    <th>Categories:</th>
+    {% for category in foundcategories %}
+    <tr>
+      <td>
+        <a href="{{ url_for('categories_view', category_id=category.id) }}">{{ category.name }}</a>
+      </td>
+    </tr>
+    {% endfor %}
+  {% endif %}
+</table>
+
+
+
+
+{% endblock %}

@@ -14,18 +14,6 @@ def tasks_index():
     return render_template("tasks/list.html", tasks=Task.query.all())
 
 
-@app.route("/*", methods=["POST"])
-def tasks_search():
-    param = request.form.get("query")
-
-    found = Task.query.filter_by(name=param).all()
-
-    if found is None or len(found) == 0:
-        return render_template("notfound.html")
-
-    return render_template("tasks/list.html", tasks=found)
-
-
 @app.route("/tasks/<task_id>/")
 def tasks_view(task_id):
     task = Task.query.get(task_id)
@@ -41,7 +29,6 @@ def tasks_view(task_id):
 @app.route("/tasks/new", methods=["GET", "POST"])
 @login_required(role="ADMIN")
 def tasks_create():
-
     if request.method == "GET":
         return render_template("tasks/new.html",
                                form=TaskForm(),
