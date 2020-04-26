@@ -8,7 +8,7 @@ You can find a more detailed [description about the topic](./documentation/descr
 
 See the [user guide](./documentation/userguide.md) and instructions on [how to install](./documentation/install.md) the application locally and in heroku.
 
-The application is in [heroku](https://tsoha-training-planner.herokuapp.com/tasks). Example credentials are:
+The application is in [heroku](https://tsoha-training-planner.herokuapp.com). Example credentials are:
 
 username | password | admin |
 --- |--- |--- |
