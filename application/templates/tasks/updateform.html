@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
+{{ error }}
 <form method="POST" action="{{ url_for('tasks_update', task_id=task.id) }}">
   <table>
     <th>{{ task.name }}</th>

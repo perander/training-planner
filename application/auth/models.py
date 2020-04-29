@@ -3,6 +3,7 @@ from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from application import db, bcrypt
 from application.tasks.models import done, inprogress
 from application.models import Base
+from application.tasks.models import Task, find
 
 
 class User(Base):
@@ -60,3 +61,17 @@ class User(Base):
         if self.admin:
             return ["ADMIN"]
         return []
+
+    def mark_done(self, task_id):
+        task = find(task_id)
+
+        self.tasksdone.append(task)
+        if task in self.tasksinprogress:
+            self.tasksinprogress.remove(task)
+
+        db.session().add(self)
+
+    def mark_inprogress(self, task_id):
+        task = find(task_id)
+        self.tasksinprogress.append(task)
+        db.session().add(self)

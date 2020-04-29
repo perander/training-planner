@@ -1,6 +1,6 @@
 from application import db
 from application.models import Base
-from application.category.models import Category
+from application.category.models import Category, get_all_categories
 
 from sqlalchemy.sql import text
 
@@ -55,7 +55,11 @@ class Task(Base):
             return False
         return self in task.tags.all()
 
-    # in these 4 methods, self refers to the task being created/updated.
+    def get_tags(self):
+        return Category.query.join(tags).join(Task).filter(
+            (tags.c.category_id == Category.id) & (tags.c.task_id == self.id)).all()
+
+    # in the next 4 methods, self refers to the task being created/updated.
     # A task can assign subtasks for itself, but not assign itself (as a subtask) for other tasks
     def set_subtask(self, task):
         if not task.has_supertask(self):
@@ -78,6 +82,9 @@ class Task(Base):
             return False
         return self.supertasks.filter_by(
             supertask_id=task.id).first() is not None
+
+    def get_subtasks(self):
+        return [item.subtask for item in self.subtasks]
 
     # @staticmethod
     # def show_new_tasks(user):
@@ -146,6 +153,73 @@ class Task(Base):
             response.append({"id": row[0], "name": row[1], "inprogress_by": row[2]})
 
         return response
+
+
+def exists(name):
+    return Task.query.filter_by(name=name).first() is not None
+
+
+def exists_another(task_id, name):
+    for task in Task.query.filter_by(name=name).all():
+        if task.id != int(task_id):
+            return True
+    return False
+
+
+def find(task_id):
+    return Task.query.get(task_id)
+
+
+def get_all_tasks():
+    return Task.query.all()
+
+
+def create(name, description, categories, subtasks):
+    t = Task(name, description)
+
+    for id in categories:
+        c = Category.query.get(id)
+        t.add_tag(c)
+
+    for id in subtasks:
+        s = Task.query.get(id)
+        t.set_subtask(s)
+
+    db.session().add(t)
+
+
+def update(task_id, name, description, categories, subtasks):
+    task = find(task_id)
+    task.name = name
+    task.description = description
+
+    all_categories = get_all_categories()
+    all_subtasks = get_all_tasks()
+
+    old_categories = task.get_tags()
+    old_subtasks = task.get_subtasks()
+
+    updated_categories = [int(c.id) for c in categories]
+    updated_subtasks = subtasks
+
+    for c in all_categories:
+        if str(c.id) in updated_categories and c not in old_categories:
+            task.add_tag(c)
+        elif str(c.id) not in updated_categories and c in old_categories:
+            task.remove_tag(c)
+
+    for st in all_subtasks:
+        if str(st.id) in updated_subtasks and st not in old_subtasks:
+            task.set_subtask(st)
+        elif str(st.id) not in updated_subtasks and st in old_subtasks:
+            task.remove_subtask(st)
+
+    db.session.add(task)
+
+
+def delete(task_id):
+    t = Task.query.get(task_id)
+    db.session().delete(t)
 
 
 done = db.Table('tasksdone',
