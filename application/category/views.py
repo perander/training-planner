@@ -2,7 +2,7 @@ from flask import redirect, render_template, request, url_for
 from flask_login import current_user
 
 from application import app, db, login_required
-from application.category.models import Category
+from application.category.models import *
 from application.category.forms import CategoryForm
 
 
@@ -29,9 +29,11 @@ def categories_create():
     if not form.validate():
         return render_template("categories/new.html", form=form)
 
-    t = Category(name=form.name.data)
+    if exists(form.name.data):
+        return render_template("categories/new.html", form=form,
+                               error="Category already exists")
 
-    db.session().add(t)
+    create(form.name.data)
     db.session().commit()
 
     return redirect(url_for("categories_index"))
@@ -40,10 +42,7 @@ def categories_create():
 @app.route("/deletecategory/<category_id>", methods=["POST"])
 @login_required(role="ADMIN")
 def categories_delete(category_id):
-
-    c = Category.query.get(category_id)
-
-    db.session().delete(c)
+    delete(category_id)
     db.session().commit()
 
     return redirect(url_for("categories_index"))

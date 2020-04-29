@@ -2,6 +2,7 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('categories_create') }}">
+  {{ error }}
   <table>
     <tr>
       <td>
