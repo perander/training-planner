@@ -1,19 +1,18 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<table>
-    <th>{{ category.name }}</th>
-    {% for task in tasks %}
-    <tr>
-        <td>
+<h1>{{ category.name }}</h1>
+<div>
+    <ul class="list-group">
+      {% for task in tasks %}
+        <li class="list-group-item">
             {% if current_user.admin %}
             <a href="{{ url_for('tasks_update', task_id=task.id) }}">{{ task.name }}</a>
             {% else %}
             <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
             {% endif %}
-        </td>
-
-    </tr>
-    {% endfor %}
-</table>
+        </li>
+      {% endfor %}
+    </ul>
+</div>
 {% endblock %}

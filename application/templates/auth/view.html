@@ -1,29 +1,29 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<table>
-    <th>{{ user.username }}</th>
-    <tr>
-        <th>In progress</th>
-    </tr>
-    {% for task in user.tasksinprogress %}
-    <tr>
-        <td>
-            <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
-        </td>
-    </tr>
-    {% endfor %}
+<h1>Your tasks</h1>
 
-    <tr>
-        <th>Done</th>
-    </tr>
+<h2>In progress</h2>
+<div>
+    <ul class="list-group">
+      {% for task in user.tasksinprogress %}
+        <li class="list-group-item">
+            <a class="list-group-item-heading" href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+            <p class="list-group-item-text">{{ task.description }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+</div>
 
-    {% for task in user.tasksdone %}
-    <tr>
-        <td>
-            <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+<h2>Done</h2>
+<div>
+    <ul class="list-group">
+      {% for task in user.tasksdone %}
+        <li class="list-group-item">
+            <a class="list-group-item-heading" href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+            <p class="list-group-item-text">{{ task.description }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+</div>
 {% endblock %}
