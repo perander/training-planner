@@ -5,14 +5,13 @@ from application.category.models import Category
 from application.tasks.models import Task
 from sqlalchemy import func
 
+
 @app.route("/")
 @login_required
 def index():
     if current_user.admin:
         return redirect(url_for("tasks_index"))
 
-    # TODO: new tasks per user
-    # new = Task.show_new_tasks(current_user)
     new = current_user.get_new_tasks()
     inprogress = Task.show_tasksinprogress_by(current_user)
     recommendations = current_user.recommendations()

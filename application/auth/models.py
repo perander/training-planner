@@ -3,7 +3,7 @@ from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from application import db, bcrypt
 from application.tasks.models import done, inprogress
 from application.models import Base
-from application.tasks.models import Task, find, get_all_tasks
+from application.tasks.models import find, get_all_tasks
 
 
 class User(Base):
@@ -13,8 +13,6 @@ class User(Base):
     _password = db.Column(db.String(144), nullable=False)
     admin = db.Column(db.Boolean, default=False, nullable=False)
 
-    # todo: cascade all, delete-orphan -> pitäisi toimia niin että deletoi
-    # association tablesta, ei taskeista tai accountista
     tasksdone = db.relationship('Task',
                                 secondary=done,
                                 backref=db.backref('doneby',

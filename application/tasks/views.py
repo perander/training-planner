@@ -3,13 +3,11 @@ from flask_login import current_user
 
 from application import app, db, login_required
 
-from application.tasks.models import Task, tags, find, \
+from application.tasks.models import find, \
     get_all_tasks, exists, exists_another, create, update, delete, all_tasks_ordered_by_createdate
 from application.tasks.forms import TaskForm
 
-from application.auth.models import User
-
-from application.category.models import Category, get_all_categories, all_categories_ordered_by_createdate
+from application.category.models import get_all_categories
 
 
 @app.route("/tasks", methods=["GET"])

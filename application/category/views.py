@@ -1,8 +1,7 @@
 from flask import redirect, render_template, request, url_for
-from flask_login import current_user
 
 from application import app, db, login_required
-from application.category.models import Category, create, exists, exists_another, delete, get_all_categories, find, \
+from application.category.models import create, exists, exists_another, delete, find, \
     update, all_categories_ordered_by_createdate
 from application.category.forms import CategoryForm
 
