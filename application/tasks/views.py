@@ -4,7 +4,7 @@ from flask_login import current_user
 from application import app, db, login_required
 
 from application.tasks.models import Task, tags, find, \
-    get_all_tasks, exists, exists_another, create, update, delete
+    get_all_tasks, exists, exists_another, create, update, delete, all_tasks_ordered_by_createdate
 from application.tasks.forms import TaskForm
 
 from application.auth.models import User
@@ -14,7 +14,11 @@ from application.category.models import Category, get_all_categories
 
 @app.route("/tasks", methods=["GET"])
 def tasks_index():
-    return render_template("tasks/list.html", tasks=Task.query.all())
+    page = request.args.get('page', 1, type=int)
+    pagination = all_tasks_ordered_by_createdate().paginate(page, per_page=10)
+    tasks = pagination.items
+
+    return render_template("tasks/list.html", tasks=tasks, pagination=pagination)
 
 
 @app.route("/tasks/<task_id>/")
@@ -110,7 +114,7 @@ def tasks_set_done(task_id):
     current_user.mark_done(task_id)
     db.session().commit()
 
-    return redirect(url_for("tasks_index"))
+    return redirect(url_for("tasks_view", task_id=task_id))
 
 
 @app.route("/setinprogress/<task_id>/", methods=["POST"])
@@ -122,4 +126,4 @@ def tasks_set_inprogress(task_id):
     current_user.mark_inprogress(task_id)
     db.session().commit()
 
-    return redirect(url_for("tasks_index"))
+    return redirect(url_for("tasks_view", task_id=task_id))

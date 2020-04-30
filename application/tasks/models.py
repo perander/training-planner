@@ -174,6 +174,10 @@ def get_all_tasks():
     return Task.query.all()
 
 
+def all_tasks_ordered_by_createdate():
+    return Task.query.order_by(Task.date_created.desc())
+
+
 def create(name, description, categories, subtasks):
     t = Task(name, description)
 
@@ -199,7 +203,7 @@ def update(task_id, name, description, categories, subtasks):
     old_categories = task.get_tags()
     old_subtasks = task.get_subtasks()
 
-    updated_categories = [int(c.id) for c in categories]
+    updated_categories = categories
     updated_subtasks = subtasks
 
     for c in all_categories:
