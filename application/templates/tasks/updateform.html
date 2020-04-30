@@ -1,82 +1,57 @@
 {% extends "layout.html" %}
+{% from "_macros.html" import pagination_widget as widget %}
 
 {% block body %}
 {{ error }}
+
 <form method="POST" action="{{ url_for('tasks_update', task_id=task.id) }}">
-  <table>
-    <th>{{ task.name }}</th>
-    <tr>
-      <td>
-        {{ form.name.label }}
-      </td>
-      <td>
-        {{ form.name(value=task.name) }}
-      </td>
-      <td>
-        <ul>
-          {% for error in form.name.errors %}
-          <li>{{ error }}</li>
-          {% endfor %}
-        </ul>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        {{ form.description.label }}
-      </td>
-      <td>
-        {{ form.description(value=task.description) }}
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <table>
-          <th>Update categories:</th>
-          {% for category in categories %}
-          <tr>
-            <td>
-              <div class="form-check">
-                {% if category in tags %}
-                <input class="form-check-input" type="checkbox" checked=True name="categories" value={{category.id}}>
-                {% else %}
-                <input class="form-check-input" type="checkbox" name="categories" value={{category.id}}>
-                {% endif %}
-                <label class="form-check-label">
-                  {{ category.name }}
-                </label>
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </table>
-      </td>
-      <td>
-        <table>
-          <th>Update prerequisites:</th>
-          {% for task in subtasks %}
-          <tr>
-            <td>
-              <div class="form-check">
-                {% if task in existing %}
-                <input class="form-check-input" type="checkbox" checked=True name="subtasks" value={{task.id}}>
-                {% else %}
-                <input class="form-check-input" type="checkbox" name="subtasks" value={{task.id}}>
-                {% endif %}
-                <label class="form-check-label">
-                  {{ task.name }}
-                </label>
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="3">
-        <input type="submit" value="Update"/>
-      </td>
-    </tr>
-  </table>
+  <div class="form-group">
+    <label for="update_task_name">{{ form.name.label }}</label>
+    {{ form.name(class="form-control", id="update_task_name",
+    value=task.name) }}
+    <ul>
+      {% for error in form.name.errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="form-group">
+    <label for="update_task_description">{{ form.description.label }}</label>
+    {{ form.description(class="form-control", id="update_task_description",
+    value=task.description )}}
+    <ul>
+      {% for error in form.description.errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="form-check">
+    <h4>Choose categories:</h4>
+    {% for category in categories %}
+      {% if category in tags %}
+        <input class="form-check-input" type="checkbox" checked=True name="categories" value={{category.id}}>
+        {% else %}
+        <input class="form-check-input" type="checkbox" name="categories" value={{category.id}}>
+      {% endif %}
+      <label class="form-check-label">
+        {{ category.name }}
+      </label><br>
+    {% endfor %}
+  </div>
+
+  <div class="form-check">
+    <h4>Assign prerequisites:</h4>
+    {% for task in subtasks %}
+      {% if task in existing %}
+        <input class="form-check-input" type="checkbox" checked=True name="subtasks" value={{task.id}}>
+        {% else %}
+        <input class="form-check-input" type="checkbox" name="subtasks" value={{task.id}}>
+      {% endif %}
+      <label class="form-check-label">
+        {{ task.name }}
+      </label><br>
+    {% endfor %}
+  </div>
+  <input type="submit" class="btn btn-primary" value="Update"/>
 </form>
 {% endblock %}
