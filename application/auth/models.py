@@ -3,7 +3,7 @@ from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from application import db, bcrypt
 from application.tasks.models import done, inprogress
 from application.models import Base
-from application.tasks.models import Task, find
+from application.tasks.models import Task, find, get_all_tasks
 
 
 class User(Base):
@@ -75,3 +75,29 @@ class User(Base):
         task = find(task_id)
         self.tasksinprogress.append(task)
         db.session().add(self)
+
+    def get_new_tasks(self):
+        tasks = get_all_tasks()
+        new = []
+
+        for task in tasks:
+            if task not in self.tasksdone and task not in self.tasksinprogress:
+                new.append(task)
+
+        return new
+
+    def recommendations(self):
+        tasks = self.get_new_tasks()
+
+        recommended = []
+
+        for task in tasks:
+            goal = len(task.subtasks)
+            found = 0
+            for d in self.tasksdone:
+                if d.id != task.id and d.has_supertask(task):
+                    found += 1
+            if found == goal:
+                recommended.append(task)
+
+        return recommended

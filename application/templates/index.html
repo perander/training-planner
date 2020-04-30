@@ -3,7 +3,23 @@
 {% block body %}
 <h1>Welcome, {{ current_user.username}}!</h1>
 
+<h2>Recommended for you</h2>
+<p>These tasks are recommended for you based on your previous activity. You have done all of the prerequisites of
+these tasks, so you are probably ready to pick these as your next tasks to work on.</p>
+<div>
+    <ul class="list-group">
+      {% for task in recommendations %}
+        <li class="list-group-item">
+            <a class="list-group-item-heading" href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+</div>
+
+
 <h2>New tasks for you:</h2>
+<p>All tasks you haven't marked as done or in progress. All are shown here
+  regardless of what you have done previously.</p>
 <ul>
   {% for task in new %}
   <li>
@@ -11,20 +27,4 @@
   </li>
   {% endfor %}
 </ul>
-
-
-<h2>Continue with your tasks in progress:</h2>
-<table>
-  <tr>
-    <th>Task</th>
-  </tr>
-  {% for task in inprogress %}
-  <tr>
-    <td>
-      <a href="{{ url_for('tasks_view', task_id=task.id) }}">{{ task.name }}</a>
-      {{ task.date }}
-    </td>
-  </tr>
-  {% endfor %}
-</table>
 {% endblock %}

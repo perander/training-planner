@@ -13,11 +13,14 @@ def index():
 
     # TODO: new tasks per user
     # new = Task.show_new_tasks(current_user)
-    new = Task.query.all()
+    new = current_user.get_new_tasks()
     inprogress = Task.show_tasksinprogress_by(current_user)
+    recommendations = current_user.recommendations()
+
     return render_template("index.html",
                            new=new,
-                           inprogress=inprogress)
+                           inprogress=inprogress,
+                           recommendations=recommendations)
 
 
 @app.route("/", methods=["POST"])
