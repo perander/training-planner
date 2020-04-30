@@ -1,24 +1,42 @@
 {% extends "layout.html" %}
+{% import "_macros.html" as macros %}
 
 {% block body %}
 
-<table>
-    <tr>
-        <th>Categories</th>
-    </tr>
-    {% for category in categories %}
-    <tr>
-        <td>
-            <a href="{{ url_for('categories_view', category_id=category.id) }}">{{ category.name }}</a>
-        </td>
-        {% if current_user.admin %}
-        <td>
-            <form method="POST" action="{{ url_for('categories_delete', category_id=category.id) }}">
-                <input type="submit" value="Delete"/>
-            </form>
-        </td>
-        {% endif %}
-    </tr>
-    {% endfor %}
+<div class="container">
+    <h1>Categories</h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                {% if current_user.admin %}
+                <th></th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>
+                    {% if current_user.admin %}
+                    <a href="{{ url_for('categories_update', category_id=category.id) }}">{{ category.name }}</a>
+                    {% else %}
+                    <a href="{{ url_for('categories_view', category_id=category.id) }}">{{ category.name }}</a>
+                    {% endif %}
+                </td>
+                {% if current_user.admin %}
+                <td>
+                    <form method="POST" action="{{ url_for('categories_delete', category_id=category.id) }}">
+                        <input type="submit" class="btn btn-danger" value="Delete"/>
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
+    <div class="pagination">
+        {{ macros.pagination_widget(pagination, 'categories_index') }}
+    </div>
+</div>
 {% endblock %}

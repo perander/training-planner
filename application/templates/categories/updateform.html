@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{{ error }}
+<form method="POST" action="{{ url_for('categories_update', category_id=category.id) }}">
+  <div class="form-group">
+    <label for="update_category_name">{{ form.name.label }}</label>
+    {{ form.name(class="form-control", id="update_category_name",
+    value=category.name) }}
+    <ul>
+      {% for error in form.name.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <input type="submit" class="btn btn-primary" value="Update"/>
+</form>
+{% endblock %}
