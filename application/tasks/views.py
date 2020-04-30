@@ -9,13 +9,13 @@ from application.tasks.forms import TaskForm
 
 from application.auth.models import User
 
-from application.category.models import Category, get_all_categories
+from application.category.models import Category, get_all_categories, all_categories_ordered_by_createdate
 
 
 @app.route("/tasks", methods=["GET"])
 def tasks_index():
     page = request.args.get('page', 1, type=int)
-    pagination = all_tasks_ordered_by_createdate().paginate(page, per_page=10)
+    pagination = all_tasks_ordered_by_createdate().paginate(page, per_page=8)
     tasks = pagination.items
 
     return render_template("tasks/list.html", tasks=tasks, pagination=pagination)
@@ -31,9 +31,12 @@ def tasks_view(task_id):
 @app.route("/tasks/new", methods=["GET", "POST"])
 @login_required(role="ADMIN")
 def tasks_create():
+    categories = get_all_categories()
+    tasks = get_all_tasks()
+
     if request.method == "GET":
         return render_template("tasks/new.html", form=TaskForm(),
-                               categories=get_all_categories(), tasks=get_all_tasks())
+                               categories=categories, tasks=tasks)
 
     form = TaskForm(request.form)
 
@@ -43,6 +46,8 @@ def tasks_create():
 
     if form.is_submitted() and exists(form.name.data):
         return render_template("tasks/new.html", form=form,
+                               categories=categories,
+                               tasks=tasks,
                                error="Task " + form.name.data + " already exists")
 
     create(form.name.data,

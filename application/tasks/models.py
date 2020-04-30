@@ -105,6 +105,7 @@ class Task(Base):
     #
     #     return response
 
+
     @staticmethod
     def show_tasksinprogress_by(user):
         stmt = text("SELECT task_id, task.name, task.date_modified"
@@ -128,7 +129,8 @@ class Task(Base):
                     " FROM tasksdone, task"
                     " WHERE tasksdone.task_id = task.id"
                     " GROUP BY task_id, task.name"
-                    " ORDER BY COUNT(*) DESC")
+                    " ORDER BY COUNT(*) DESC"
+                    " LIMIT 5")
 
         res = db.engine.execute(stmt)
 
@@ -144,7 +146,8 @@ class Task(Base):
                     " FROM tasksinprogress, task"
                     " WHERE tasksinprogress.task_id = task.id"
                     " GROUP BY task_id, task.name"
-                    " ORDER BY COUNT(*) DESC")
+                    " ORDER BY COUNT(*) DESC"
+                    " LIMIT 5")
 
         res = db.engine.execute(stmt)
 
@@ -235,3 +238,5 @@ inprogress = db.Table('tasksinprogress',
                       db.Column('account_id', db.Integer, db.ForeignKey('account.id')),
                       db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
                       )
+
+

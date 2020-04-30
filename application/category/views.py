@@ -10,7 +10,7 @@ from application.category.forms import CategoryForm
 @app.route("/categories", methods=["GET"])
 def categories_index():
     page = request.args.get('page', 1, type=int)
-    pagination = all_categories_ordered_by_createdate().paginate(page, per_page=10)
+    pagination = all_categories_ordered_by_createdate().paginate(page, per_page=8)
     categories = pagination.items
 
     return render_template("categories/list.html", categories=categories, pagination=pagination)
@@ -36,7 +36,7 @@ def categories_create():
 
     if exists(form.name.data):
         return render_template("categories/new.html", form=form,
-                               error="Category already exists")
+                               error="Category " + form.name.data + " already exists")
 
     create(form.name.data)
     db.session().commit()
