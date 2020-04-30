@@ -19,13 +19,13 @@ class User(Base):
                                 secondary=done,
                                 backref=db.backref('doneby',
                                                    lazy='dynamic'),
-                                lazy='dynamic')
+                                lazy='select')
 
     tasksinprogress = db.relationship('Task',
                                       secondary=inprogress,
                                       backref=db.backref('inprogressby',
                                                          lazy='dynamic'),
-                                      lazy='dynamic')
+                                      lazy='select')
 
     def __init__(self, username, plaintext, admin):
         self.username = username

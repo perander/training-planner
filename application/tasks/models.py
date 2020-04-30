@@ -37,7 +37,7 @@ class Task(Base):
     subtasks = db.relationship('Subtask',
                                foreign_keys=[Subtask.supertask_id],
                                backref=db.backref('supertask', lazy='joined'),
-                               lazy='dynamic',
+                               lazy='select',
                                cascade='all, delete-orphan')
 
     def __init__(self, name, description):
